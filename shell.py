@@ -1,7 +1,7 @@
 import basic
 
 while True:
-	text = input('basic > ')
+	text = input('space_code > ')
 	if text.strip() == "": continue
 	result, error = basic.run('<stdin>', text)
 
