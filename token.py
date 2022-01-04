@@ -50,7 +50,7 @@ KEYWORDS = [
     'OR',
     'NOT',
     'IF',
-    'ELIF',
+    'ELSEIF',
     'ELSE',
     'FOR',
     'TO',

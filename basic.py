@@ -12,7 +12,6 @@ from nodes import *
 #######################################
 # PARSER
 #######################################
-
 class Parser:
     def __init__(self, tokens):
         self.tokens = tokens
@@ -671,19 +670,12 @@ class Parser:
         res.register_advancement()
         self.advance()
 
-        if self.current_tok.type == TT_LcPAREN:
+        if self.current_tok.type == TT_ARROW:
             res.register_advancement()
             self.advance()
 
             body = res.register(self.expr())
             if res.error: return res
-
-            if not self.current_tok.type == TT_RcPAREN:
-                return res.failure(InvalidSyntaxError(
-                    self.current_tok.pos_start, self.current_tok.pos_end, "Expected '}'"
-                ))
-            res.register_advancement()
-            self.advance()
 
             return res.success(FuncDefNode(
                 var_name_tok,
@@ -695,7 +687,7 @@ class Parser:
         if self.current_tok.type != TT_NEWLINE:
             return res.failure(InvalidSyntaxError(
                 self.current_tok.pos_start, self.current_tok.pos_end,
-                "Expected '{' or NEWLINE"
+                f"Expected '->' or NEWLINE"
             ))
 
         res.register_advancement()
@@ -719,7 +711,6 @@ class Parser:
             body,
             False
         ))
-
     ###################################
 
     def bin_op(self, func_a, ops, func_b=None):
@@ -1494,7 +1485,7 @@ class Interpreter:
             elements.append(res.register(self.visit(node.body_node, context)))
             if res.error: return res
 
-        return res.success(elements[end_value.value-1])
+        return res.success(elements[len(elements)-1])
 
     def visit_WhileNode(self, node, context):
         res = RTResult()
